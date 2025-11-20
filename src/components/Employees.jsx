@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { withBaseUrl } from "../config/apiConfig";
 
 const Employees = ({ refresh, onEdit }) => {
   const [data, setData] = useState([]);
@@ -8,7 +9,7 @@ const Employees = ({ refresh, onEdit }) => {
   useEffect(() => {
     const apiCall = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/users");
+        const response = await axios.get(withBaseUrl("/api/users"));
         setData(response.data.data);
       } catch (error) {
         console.error("API Error:", error);
@@ -20,9 +21,7 @@ const Employees = ({ refresh, onEdit }) => {
 
   const onDelete = async (id) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:8080/api/users/${id}`
-      );
+      const response = await axios.delete(withBaseUrl(`/api/users/${id}`));
       toast.success(response.data.message);
     } catch (error) {
       toast.error(

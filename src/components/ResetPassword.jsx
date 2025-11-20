@@ -5,6 +5,7 @@ import { TbLockPassword } from "react-icons/tb";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Cookies from "js-cookie"
 import { jwtDecode } from "jwt-decode";
+import { withBaseUrl } from "../config/apiConfig";
 
 
 const ResetPassword = () => {
@@ -36,7 +37,7 @@ const ResetPassword = () => {
 
     try {
       setLoading(true);
-      const response = await axios.patch("http://localhost:8080/api/auth/reset", 
+      const response = await axios.patch(withBaseUrl("/api/auth/reset"), 
         {
             email: userEmail,newPassword,
       },

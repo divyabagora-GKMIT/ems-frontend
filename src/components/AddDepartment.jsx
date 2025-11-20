@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { withBaseUrl } from "../config/apiConfig";
 
 const DepartmentForm = ({ onClose, handleRefresh, initialData }) => {
   const isEditing = !!initialData?.id;
@@ -27,11 +28,11 @@ const DepartmentForm = ({ onClose, handleRefresh, initialData }) => {
       let successMessage;
 
       if (isEditing) {
-        url = `http://localhost:8080/api/departments/${initialData.id}`;
+        url = withBaseUrl(`/api/departments/${initialData.id}`);
         method = axios.patch;
         successMessage = "Department updated successfully!";
       } else {
-        url = "http://localhost:8080/api/departments";
+        url = withBaseUrl("/api/departments");
         method = axios.post;
         successMessage = "Department added successfully!";
       }
@@ -60,7 +61,7 @@ const DepartmentForm = ({ onClose, handleRefresh, initialData }) => {
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
           <div>
             <label htmlFor="department-name" className="block text-sm mb-1">
-              Department Name
+              Department Name <span className="text-red-500">*</span>
             </label>
             <input
               id="department-name"

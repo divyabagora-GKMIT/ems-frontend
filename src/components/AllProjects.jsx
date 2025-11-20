@@ -1,7 +1,8 @@
-import axios, { Axios } from "axios";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import ModelWrapper from "./ModelWrapper";
+import { withBaseUrl } from "../config/apiConfig";
 
 const AllProjects = ({ refresh, onEdit, onManageMembers }) => { // Added onEdit and onManageMembers to props (if used outside)
   const [data, setData] = useState([]);
@@ -17,7 +18,7 @@ const AllProjects = ({ refresh, onEdit, onManageMembers }) => { // Added onEdit 
   useEffect(() => {
     const apiCall = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/projects");
+        const response = await axios.get(withBaseUrl("/api/projects"));
         setData(response.data.data);
       } catch (error) {
         console.error("API Error:", error);
@@ -30,7 +31,7 @@ const AllProjects = ({ refresh, onEdit, onManageMembers }) => { // Added onEdit 
   // --- Delete Logic ---
   const onDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:8080/api/projects/${id}`);
+      const response = await axios.delete(withBaseUrl(`/api/projects/${id}`));
       toast.success("Project Deleted Successfully");
       // Optional: Manually update state or rely on the 'refresh' prop mechanism
     } catch (error) {
@@ -42,7 +43,7 @@ const AllProjects = ({ refresh, onEdit, onManageMembers }) => { // Added onEdit 
   const fetchEmployees = async () => {
     if (employees.length > 0) return;
     try {
-      const response = await axios.get("http://localhost:8080/api/users");
+      const response = await axios.get(withBaseUrl("/api/users"));
       setEmployees(response.data.data || []);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to load employees");
@@ -53,7 +54,7 @@ const AllProjects = ({ refresh, onEdit, onManageMembers }) => { // Added onEdit 
     setIsMembersLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/project-members/members/${projectId}`
+        withBaseUrl(`/api/project-members/members/${projectId}`)
       );
       setMembers(response.data.data || []);
     } catch (error) {
@@ -93,7 +94,7 @@ const AllProjects = ({ refresh, onEdit, onManageMembers }) => { // Added onEdit 
 
     setIsMemberSubmitting(true);
     try {
-      await axios.post("http://localhost:8080/api/project-members", {
+      await axios.post(withBaseUrl("/api/project-members"), {
         project_id: selectedProject.id,
         user_id: memberForm.userId,
         project_role: memberForm.projectRole,
@@ -124,7 +125,7 @@ const AllProjects = ({ refresh, onEdit, onManageMembers }) => { // Added onEdit 
           data.map((item) => (
             <div
               key={item.id}
-              className="flex items-center justify-between bg-white shadow-md p-4 rounded-lg hover:shadow-lg transition"
+              className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between bg-white shadow-md p-4 rounded-lg hover:shadow-lg transition"
             >
               {/* Left Section - Project Details */}
               <div>
@@ -150,11 +151,11 @@ const AllProjects = ({ refresh, onEdit, onManageMembers }) => { // Added onEdit 
               </div>
 
               {/* Right Section - Action Buttons */}
-              <div className="flex space-x-2">
+              <div className="flex flex-wrap gap-2 md:justify-end">
                 {/* 1. New Manage Members Button */}
                 <button
                   onClick={() => openManageMembers(item)}
-                  className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 whitespace-nowrap"
+                  className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 whitespace-nowrap w-full sm:w-auto"
                 >
                   Manage Members
                 </button>
@@ -162,7 +163,7 @@ const AllProjects = ({ refresh, onEdit, onManageMembers }) => { // Added onEdit 
                 {/* 2. Edit Button (Assuming onEdit is now defined or passed) */}
                 <button
                   onClick={() => onEdit && onEdit(item)}
-                  className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 w-full sm:w-auto"
                 >
                   Edit
                 </button>
@@ -170,7 +171,7 @@ const AllProjects = ({ refresh, onEdit, onManageMembers }) => { // Added onEdit 
                 {/* 3. Delete Button */}
                 <button
                   onClick={() => onDelete(item.id)}
-                  className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                  className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 w-full sm:w-auto"
                 >
                   Delete
                 </button>
@@ -203,7 +204,7 @@ const AllProjects = ({ refresh, onEdit, onManageMembers }) => { // Added onEdit 
                 members.map((member) => (
                   <div
                     key={member.id || member.user_id}
-                    className="p-4 flex items-center justify-between"
+                    className="p-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
                   >
                     <div>
                       <p className="text-gray-800 font-medium">

@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { withBaseUrl } from "../config/apiConfig";
 
 const CreateUser = ({ onClose, handleRefresh, initialData }) => {
   const normalize = (value) => (value === "" ? null : value);
@@ -76,15 +77,12 @@ const CreateUser = ({ onClose, handleRefresh, initialData }) => {
       let response;
       if (isEditing) {
         response = await axios.patch(
-          `http://localhost:8080/api/users/${initialData.id}`,
+          withBaseUrl(`/api/users/${initialData.id}`),
           payload
         );
         toast.success("User updated successfully!");
       } else {
-        response = await axios.post(
-          "http://localhost:8080/api/users",
-          payload
-        );
+        response = await axios.post(withBaseUrl("/api/users"), payload);
         toast.success("User added successfully!");
       }
       onClose();
@@ -107,7 +105,9 @@ const CreateUser = ({ onClose, handleRefresh, initialData }) => {
           className="grid grid-cols-1 md:grid-cols-2 gap-4"
         >
           <div>
-            <label className="block text-sm mb-1">Name</label>
+            <label className="block text-sm mb-1">
+              Name <span className="text-red-500">*</span>
+            </label>
             <input
               name="name"
               placeholder="Name"
@@ -115,11 +115,14 @@ const CreateUser = ({ onClose, handleRefresh, initialData }) => {
               onChange={handleChange}
               value={form.name}
               disabled={isSubmitting}
+              required
             />
           </div>
 
           <div>
-            <label className="block text-sm mb-1">Email</label>
+            <label className="block text-sm mb-1">
+              Email <span className="text-red-500">*</span>
+            </label>
             <input
               name="email"
               placeholder="Email"
@@ -127,11 +130,14 @@ const CreateUser = ({ onClose, handleRefresh, initialData }) => {
               onChange={handleChange}
               value={form.email}
               disabled={isSubmitting}
+              required
             />
           </div>
 
           <div>
-            <label className="block text-sm mb-1">Password</label>
+            <label className="block text-sm mb-1">
+              Password <span className="text-red-500">*</span>
+            </label>
             <input
               name="password"
               placeholder="Password"
@@ -140,6 +146,7 @@ const CreateUser = ({ onClose, handleRefresh, initialData }) => {
               onChange={handleChange}
               value={form.password}
               disabled={isSubmitting || isEditing}
+              required={!isEditing}
             />
           </div>
 

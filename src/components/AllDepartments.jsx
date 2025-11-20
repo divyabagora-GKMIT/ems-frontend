@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import ModelWrapper from "./ModelWrapper";
+import { withBaseUrl } from "../config/apiConfig";
 
 const AllDepartments = ({ refresh, onEdit }) => {
   const [data, setData] = useState([]);
@@ -17,9 +18,7 @@ const AllDepartments = ({ refresh, onEdit }) => {
   useEffect(() => {
     const apiCall = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8080/api/departments"
-        );
+        const response = await axios.get(withBaseUrl("/api/departments"));
         setData(response.data.data);
       } catch (error) {
         console.error("API Error:", error);
@@ -33,7 +32,7 @@ const AllDepartments = ({ refresh, onEdit }) => {
   const onDelete = async (id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8080/api/departments/${id}`
+        withBaseUrl(`/api/departments/${id}`)
       );
       toast.success("Department Deleted Successfully");
     } catch (error) {
@@ -47,7 +46,7 @@ const AllDepartments = ({ refresh, onEdit }) => {
   const fetchEmployees = async () => {
     if (employees.length > 0) return;
     try {
-      const response = await axios.get("http://localhost:8080/api/users");
+      const response = await axios.get(withBaseUrl("/api/users"));
       setEmployees(response.data.data || []);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to load employees");
@@ -58,7 +57,7 @@ const AllDepartments = ({ refresh, onEdit }) => {
     setIsMembersLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/department-members/members/${departmentId}`
+        withBaseUrl(`/api/department-members/members/${departmentId}`)
       );
       setMembers(response.data.data || []);
     } catch (error) {
@@ -95,7 +94,7 @@ const AllDepartments = ({ refresh, onEdit }) => {
 
     setIsMemberSubmitting(true);
     try {
-      await axios.post("http://localhost:8080/api/department-members", {
+      await axios.post(withBaseUrl("/api/department-members"), {
         department_id: selectedDepartment.id,
         user_id: memberForm.userId,
       });
@@ -120,7 +119,7 @@ const AllDepartments = ({ refresh, onEdit }) => {
           data.map((item) => (
             <div
               key={item.id}
-              className="flex items-center justify-between bg-white shadow-md p-4 rounded-lg hover:shadow-lg transition"
+              className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between bg-white shadow-md p-4 rounded-lg hover:shadow-lg transition"
             >
               {/* Left Section */}
               <div>
@@ -130,11 +129,11 @@ const AllDepartments = ({ refresh, onEdit }) => {
               </div>
 
               {/* Buttons (Right Section) */}
-              <div className="flex space-x-2">
+              <div className="flex flex-wrap gap-2 md:justify-end">
                 {/* 1. New Manage Members Button */}
                 <button
                   onClick={() => openManageMembers(item)}
-                  className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 whitespace-nowrap"
+                  className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 whitespace-nowrap w-full sm:w-auto"
                 >
                   Manage Members
                 </button>
@@ -142,7 +141,7 @@ const AllDepartments = ({ refresh, onEdit }) => {
                 {/* 2. Edit Button (Assuming onEdit is now defined or passed) */}
                 <button
                   onClick={() => onEdit && onEdit(item)}
-                  className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 w-full sm:w-auto"
                 >
                   Edit
                 </button>
@@ -150,7 +149,7 @@ const AllDepartments = ({ refresh, onEdit }) => {
                 {/* 3. Delete Button */}
                 <button
                   onClick={() => onDelete(item.id)}
-                  className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                  className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 w-full sm:w-auto"
                 >
                   Delete
                 </button>
@@ -183,7 +182,7 @@ const AllDepartments = ({ refresh, onEdit }) => {
                 members.map((member) => (
                   <div
                     key={member.id || member.user_id}
-                    className="p-4 flex items-center justify-between"
+                    className="p-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
                   >
                     <div>
                       <p className="text-gray-800 font-medium">

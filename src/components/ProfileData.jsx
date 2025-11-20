@@ -9,13 +9,13 @@ const ProfileData = ({user}) => {
 
       <div className="space-y-4">
         {/* NAME */}
-        <div className="flex justify-between border-b pb-2">
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between border-b pb-2">
           <span className="font-medium text-gray-600">Name</span>
           <span className="text-gray-800">{user.name}</span>
         </div>
 
         {/* EMAIL */}
-        <div className="flex justify-between border-b pb-2">
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between border-b pb-2">
           <span className="font-medium text-gray-600">Email</span>
           <span className="text-gray-800">{user.email}</span>
         </div>

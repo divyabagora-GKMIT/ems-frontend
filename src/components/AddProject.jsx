@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { withBaseUrl } from "../config/apiConfig";
 
 export default function AddProject({onClose , handleRefresh, initialData}) {
   const isEditing = !!initialData?.id;
@@ -51,16 +52,13 @@ export default function AddProject({onClose , handleRefresh, initialData}) {
       if (isEditing) {
         // Update existing project
         response = await axios.patch(
-          `http://localhost:8080/api/projects/${initialData.id}`,
+          withBaseUrl(`/api/projects/${initialData.id}`),
           payload
         );
         toast.success("Project updated successfully!");
       } else {
         // Create new project
-        response = await axios.post(
-          "http://localhost:8080/api/projects/",
-          payload
-        );
+        response = await axios.post(withBaseUrl("/api/projects"), payload);
         toast.success("Project added successfully!");
       }
       
@@ -82,7 +80,9 @@ export default function AddProject({onClose , handleRefresh, initialData}) {
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
           <div>
-            <label className="block text-sm mb-1">Project Name</label>
+            <label className="block text-sm mb-1">
+              Project Name <span className="text-red-500">*</span>
+            </label>
             <input
               name="name"
               placeholder="Project Name"

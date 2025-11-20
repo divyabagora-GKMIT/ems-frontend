@@ -2,6 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { withBaseUrl } from "../config/apiConfig";
 
 const MyDepartments = ({ refresh }) => {
   const [data, setData] = useState([]);
@@ -14,7 +15,7 @@ const MyDepartments = ({ refresh }) => {
     const apiCall = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/department-members/${id}`
+          withBaseUrl(`/api/department-members/departments/${id}`)
         );
 
         const records = response.data.data;
@@ -49,7 +50,7 @@ const MyDepartments = ({ refresh }) => {
           data.map((item) => (
             <div
               key={item.id}
-              className="flex items-center justify-between bg-white shadow-md p-4 rounded-lg hover:shadow-lg transition"
+              className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between bg-white shadow-md p-4 rounded-lg hover:shadow-lg transition"
             >
               {/* Left Section */}
               <div>

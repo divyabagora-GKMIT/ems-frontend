@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import toast from "react-hot-toast";
+import { withBaseUrl } from "../config/apiConfig";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -24,7 +25,7 @@ const Login = () => {
     try {
       console.log("Api called");
       const response = await axios.post(
-        "http://localhost:8080/api/auth/login",
+        withBaseUrl("/api/auth/login"),
         {
           email: email,
           password: password,
