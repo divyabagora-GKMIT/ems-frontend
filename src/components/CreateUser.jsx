@@ -126,11 +126,14 @@ const CreateUser = ({ onClose, handleRefresh, initialData }) => {
             <input
               name="email"
               placeholder="Email"
+              type="email"
               className="p-2 border rounded w-full"
               onChange={handleChange}
               value={form.email}
               disabled={isSubmitting}
               required
+              pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$"
+              title="Email must include @ and end with a domain like .com"
             />
           </div>
 
@@ -147,6 +150,8 @@ const CreateUser = ({ onClose, handleRefresh, initialData }) => {
               value={form.password}
               disabled={isSubmitting || isEditing}
               required={!isEditing}
+              pattern="^(?=.*[A-Za-z])(?=.*\\d)(?=.*[^A-Za-z0-9]).+$"
+              title="Password must include letters, numbers, and at least one special character"
             />
           </div>
 
