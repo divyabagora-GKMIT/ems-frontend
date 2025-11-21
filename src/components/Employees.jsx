@@ -1,10 +1,23 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 import { withBaseUrl } from "../config/apiConfig";
 
 const Employees = ({ refresh, onEdit }) => {
   const [data, setData] = useState([]);
+
+  let currentUserId = null;
+  try {
+    const token = Cookies.get("token");
+    if (token) {
+      const decoded = jwtDecode(token);
+      currentUserId = decoded?.id || null;
+    }
+  } catch (error) {
+    console.error("Token decode error:", error);
+  }
 
   useEffect(() => {
     const apiCall = async () => {
@@ -84,7 +97,17 @@ const Employees = ({ refresh, onEdit }) => {
                 </button>
                 <button
                   onClick={() => onDelete(item.id)}
-                  className="px-4 py-1 bg-red-600 text-white rounded hover:bg-red-700 w-full md:w-auto"
+                  className={`px-4 py-1 rounded w-full md:w-auto text-white ${
+                    item.id === currentUserId
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-red-600 hover:bg-red-700"
+                  }`}
+                  disabled={item.id === currentUserId}
+                  title={
+                    item.id === currentUserId
+                      ? "You cannot delete your own account"
+                      : "Delete"
+                  }
                 >
                   Delete
                 </button>
