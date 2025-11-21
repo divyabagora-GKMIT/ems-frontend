@@ -150,8 +150,6 @@ const CreateUser = ({ onClose, handleRefresh, initialData }) => {
               value={form.password}
               disabled={isSubmitting || isEditing}
               required={!isEditing}
-              pattern="^(?=.*[A-Za-z])(?=.*\\d)(?=.*[^A-Za-z0-9]).+$"
-              title="Password must include letters, numbers, and at least one special character"
             />
           </div>
 
