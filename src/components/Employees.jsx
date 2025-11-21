@@ -10,9 +10,11 @@ const Employees = ({ refresh, onEdit }) => {
     const apiCall = async () => {
       try {
         const response = await axios.get(withBaseUrl("/api/users"));
-        setData(response.data.data);
+        const payload = response?.data?.data;
+        setData(Array.isArray(payload) ? payload : []);
       } catch (error) {
         console.error("API Error:", error);
+        setData([]);
       }
     };
 
@@ -30,12 +32,14 @@ const Employees = ({ refresh, onEdit }) => {
     }
   };
 
+  const hasEmployees = Array.isArray(data) && data.length > 0;
+
   return (
     <div className="p-4 w-full md:max-w-4xl mx-auto">
       <h2 className="text-2xl font-semibold mb-4">All Employees</h2>
 
       <div className="space-y-3">
-        {data.length === 0 ? (
+        {!hasEmployees ? (
           <p className="text-gray-500">No employees found.</p>
         ) : (
           data.map((item) => (

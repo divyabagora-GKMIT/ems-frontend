@@ -1,4 +1,4 @@
-const DEFAULT_HOST = "65.2.160.107:8080";
+const DEFAULT_HOST = "divya.happyenterprises.org";
 
 const ENV_HOST = import.meta.env?.VITE_API_HOST || DEFAULT_HOST;
 
@@ -11,7 +11,7 @@ const normalizeHost = (host) => {
 
 const host = normalizeHost(ENV_HOST);
 
-export const API_BASE_URL = `http://${host}`;
+export const API_BASE_URL = `https//${host}`;
 
 export const withBaseUrl = (path = "") => {
   if (!path) {
