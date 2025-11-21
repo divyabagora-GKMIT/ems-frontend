@@ -11,7 +11,8 @@ const normalizeHost = (host) => {
 
 const host = normalizeHost(ENV_HOST);
 
-export const API_BASE_URL = `https//${host}`;
+export const API_BASE_URL = `https://${host}`;
+
 
 export const withBaseUrl = (path = "") => {
   if (!path) {
